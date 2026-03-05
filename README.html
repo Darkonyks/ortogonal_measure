@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orthogonal Measure — QGIS Plugin Documentation</title>
+<style>
+  :root {
+    --blue: #0064ff;
+    --green: #00b400;
+    --red: #ff3232;
+    --bg: #f8f9fa;
+    --border: #dee2e6;
+    --text: #212529;
+    --muted: #6c757d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--text);
+    line-height: 1.6;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    background: #fff;
+  }
+  h1 { font-size: 2rem; margin-bottom: .3rem; }
+  h1 small { font-size: .85rem; color: var(--muted); font-weight: 400; }
+  h2 {
+    font-size: 1.35rem;
+    margin-top: 2.2rem;
+    margin-bottom: .6rem;
+    padding-bottom: .3rem;
+    border-bottom: 2px solid var(--border);
+  }
+  h3 { font-size: 1.1rem; margin-top: 1.4rem; margin-bottom: .4rem; }
+  p, li { margin-bottom: .45rem; }
+  ul, ol { padding-left: 1.6rem; }
+  code {
+    font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+    background: var(--bg);
+    padding: .15rem .35rem;
+    border-radius: 3px;
+    font-size: .9em;
+  }
+  pre {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 1rem;
+    overflow-x: auto;
+    font-size: .88rem;
+    line-height: 1.5;
+    margin: .8rem 0;
+  }
+  pre code { background: none; padding: 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: .8rem 0;
+    font-size: .92rem;
+  }
+  th, td {
+    text-align: left;
+    padding: .45rem .7rem;
+    border: 1px solid var(--border);
+  }
+  th { background: var(--bg); font-weight: 600; }
+  tr:nth-child(even) td { background: #fcfcfc; }
+  .badge {
+    display: inline-block;
+    padding: .15rem .5rem;
+    border-radius: 3px;
+    font-size: .8rem;
+    font-weight: 600;
+    color: #fff;
+  }
+  .badge-blue  { background: var(--blue); }
+  .badge-green { background: var(--green); }
+  .badge-red   { background: var(--red); }
+  .color-swatch {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border-radius: 2px;
+    vertical-align: middle;
+    margin-right: 4px;
+    border: 1px solid #ccc;
+  }
+  .note {
+    background: #e7f1ff;
+    border-left: 4px solid var(--blue);
+    padding: .7rem 1rem;
+    margin: 1rem 0;
+    border-radius: 0 4px 4px 0;
+    font-size: .93rem;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  footer { margin-top: 3rem; color: var(--muted); font-size: .85rem; text-align: center; }
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  kbd {
+    background: var(--bg);
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: .1rem .4rem;
+    font-family: inherit;
+    font-size: .88em;
+    box-shadow: 0 1px 0 #bbb;
+  }
+</style>
+</head>
+<body>
+
+<h1>Orthogonal Measure <small>QGIS Plugin v0.1</small></h1>
+<p><strong>Author:</strong> Darko Nedic &middot;
+   <strong>Contact:</strong> <a href="mailto:office@geo-biz.com">office@geo-biz.com</a> &middot;
+   <strong>License:</strong> GNU GPL v2+ &middot;
+   <strong>Min. QGIS:</strong> 3.0</p>
+
+<hr>
+
+<h2>Overview</h2>
+<p><strong>Orthogonal Measure</strong> is a QGIS plugin that lets you define a
+<strong>local orthogonal coordinate system</strong> directly on the map canvas and then
+construct points by entering <strong>X and Y offsets in metres</strong>. It is designed for
+surveyors, civil engineers, and GIS professionals who need to quickly stake out
+or digitize points relative to a custom baseline &mdash; without leaving QGIS.</p>
+
+<div class="note">
+  The plugin works correctly in <strong>any CRS</strong> (projected or geographic) because all
+  offset calculations use ellipsoidal ground distances.
+</div>
+
+<h2>How It Works</h2>
+
+<h3>1. Coordinate System Definition</h3>
+<ol>
+  <li><strong>Point 1 &mdash; Origin (0,&thinsp;0):</strong> Click anywhere on the map to place the origin of your local system.</li>
+  <li><strong>Point 2 &mdash; Y-axis direction:</strong> Click a second point. The direction from Point&nbsp;1 to Point&nbsp;2 defines the <strong>positive Y-axis</strong>.</li>
+  <li><strong>X-axis</strong> is automatically computed as <strong>perpendicular to the Y-axis, rotated 90&deg; clockwise</strong>.</li>
+</ol>
+
+<p>Both axes are visualized on the map canvas:</p>
+<table>
+  <thead><tr><th>Axis</th><th>Colour</th><th>Positive direction</th><th>Negative direction</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><span class="color-swatch" style="background:var(--blue)"></span> Y</td>
+      <td>Blue</td><td>Solid dashed line</td><td>Faint dotted line</td>
+    </tr>
+    <tr>
+      <td><span class="color-swatch" style="background:var(--green)"></span> X</td>
+      <td>Green</td><td>Solid dashed line</td><td>Faint dotted line</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>2. Constructing Points</h3>
+<p>Once the axes are defined, the <strong>dockable panel</strong> (right side by default) becomes active:</p>
+<ol>
+  <li>Enter the <strong>Y offset</strong> (metres along the Y-axis from origin).</li>
+  <li>Enter the <strong>X offset</strong> (metres along the X-axis from origin).</li>
+  <li>Click <strong>Construct Point</strong> (or press <kbd>Enter</kbd>).</li>
+</ol>
+<p>The plugin places a red <strong>&times;</strong> marker at the computed map position and draws:</p>
+<ul>
+  <li>A <span class="badge badge-blue">blue</span> dashed line from the origin along the Y-axis to the projection point.</li>
+  <li>A <span class="badge badge-green">green</span> dashed line from the projection point perpendicular to the constructed point.</li>
+  <li>A small white <strong>&square;</strong> at the right-angle corner.</li>
+  <li>A compact <strong>label</strong> showing the offset values.</li>
+</ul>
+<p>You can construct as many points as you need. Each point is added to the results table in the panel.</p>
+
+<h3>3. Exporting Points</h3>
+<p>Click <strong>Export to Layer</strong> to create a temporary <strong>memory layer</strong>
+named <em>&ldquo;Orthogonal Measure Points&rdquo;</em> containing all constructed points:</p>
+<table>
+  <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>id</code></td><td>Integer</td><td>Sequential point number</td></tr>
+    <tr><td><code>x_offset</code></td><td>Double</td><td>X offset in metres</td></tr>
+    <tr><td><code>y_offset</code></td><td>Double</td><td>Y offset in metres</td></tr>
+    <tr><td><code>map_e</code></td><td>Double</td><td>Easting in map CRS</td></tr>
+    <tr><td><code>map_n</code></td><td>Double</td><td>Northing in map CRS</td></tr>
+  </tbody>
+</table>
+<p>The layer uses the current project CRS and can be saved to any spatial format
+(Shapefile, GeoPackage, etc.) using standard QGIS tools.</p>
+
+<h2>User Interface</h2>
+
+<h3>Toolbar &amp; Menu</h3>
+<ul>
+  <li><strong>Toolbar icon:</strong> Click the Orthogonal Measure icon, or go to <strong>Plugins &rarr; Orthogonal Measure</strong>.</li>
+  <li>The map tool activates, and the dockable panel opens.</li>
+</ul>
+
+<h3>Dockable Panel</h3>
+<p>The panel can be:</p>
+<ul>
+  <li><strong>Docked</strong> to the left, right, top, or bottom of the QGIS window.</li>
+  <li><strong>Tabbed</strong> alongside Layers, Browser, or any other panel.</li>
+  <li><strong>Floated</strong> as an independent window.</li>
+</ul>
+
+<table>
+  <thead><tr><th>Section</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Status</strong></td><td>Instructions and status messages; shows origin and Y-axis coords once defined.</td></tr>
+    <tr><td><strong>Enter offset (m)</strong></td><td>Y and X spinboxes (range &plusmn;999&thinsp;999 m, 3 decimal places, 0.1 m step).</td></tr>
+    <tr><td><strong>Constructed Points</strong></td><td>Table listing all constructed points with offsets and map coordinates.</td></tr>
+    <tr><td><strong>Buttons</strong></td><td><em>Reset</em> &mdash; clear everything. <em>Export to Layer</em> &mdash; export points.</td></tr>
+  </tbody>
+</table>
+
+<h3>Keyboard Shortcuts</h3>
+<table>
+  <thead><tr><th>Key</th><th>Action</th></tr></thead>
+  <tbody>
+    <tr><td><kbd>Enter</kbd></td><td>Construct point (when a spinbox is focused)</td></tr>
+    <tr><td><kbd>Escape</kbd></td><td>Reset the tool (clear axes and all points on the canvas)</td></tr>
+  </tbody>
+</table>
+
+<h3>Snapping</h3>
+<p>When the map tool is active, <strong>vertex + segment snapping</strong> is automatically
+enabled on all layers with a 20&thinsp;px tolerance. This lets you precisely snap the
+origin or Y-axis point to existing features. The previous snapping configuration
+is restored when the tool is deactivated.</p>
+
+<h2>Visual Feedback</h2>
+<p>All visual elements are drawn directly on the map canvas and automatically reposition when you pan or zoom.</p>
+<table>
+  <thead><tr><th>Element</th><th>Appearance</th></tr></thead>
+  <tbody>
+    <tr><td>Origin marker</td><td><span class="color-swatch" style="background:var(--red)"></span> Red double-triangle, 12 px</td></tr>
+    <tr><td>Y-axis point marker</td><td><span class="color-swatch" style="background:var(--blue)"></span> Blue triangle, 10 px</td></tr>
+    <tr><td>Y-axis (positive)</td><td><span class="color-swatch" style="background:var(--blue)"></span> Blue dashed, 2 px</td></tr>
+    <tr><td>Y-axis (negative)</td><td><span class="color-swatch" style="background:rgba(0,100,255,0.3)"></span> Blue dotted, 1 px, faded</td></tr>
+    <tr><td>X-axis (positive)</td><td><span class="color-swatch" style="background:var(--green)"></span> Green dashed, 2 px</td></tr>
+    <tr><td>X-axis (negative)</td><td><span class="color-swatch" style="background:rgba(0,180,0,0.3)"></span> Green dotted, 1 px, faded</td></tr>
+    <tr><td>Constructed point</td><td><span class="color-swatch" style="background:var(--red)"></span> Red &times;, 12 px</td></tr>
+    <tr><td>Y projection line</td><td><span class="color-swatch" style="background:var(--blue)"></span> Blue dashed, origin &rarr; projection</td></tr>
+    <tr><td>X projection line</td><td><span class="color-swatch" style="background:var(--green)"></span> Green dashed, projection &rarr; point</td></tr>
+    <tr><td>Right-angle indicator</td><td>White &square;, 6 px at the corner</td></tr>
+    <tr><td>Offset label</td><td>Compact text, white background, thin border</td></tr>
+  </tbody>
+</table>
+
+<h2>Typical Workflow</h2>
+<pre><code> 1.  Open your project in QGIS (any CRS).
+ 2.  Click the Orthogonal Measure toolbar icon.
+ 3.  Click on a known point on the map → origin is set (red marker).
+ 4.  Click a second point that defines the Y-direction (blue marker).
+     → Axes appear on the canvas; the panel becomes active.
+ 5.  Enter Y = 10.000, X = 0.000 → click Construct Point.
+     → A point is placed 10 m along the Y-axis.
+ 6.  Enter Y = 5.000, X = -3.500 → click Construct Point.
+     → A point is placed 5 m along Y and 3.5 m to the left of Y.
+ 7.  Repeat for all needed points.
+ 8.  Click Export to Layer → memory layer is added to the project.
+ 9.  Right-click the layer → Export → Save As… to save permanently.
+10.  Close the panel or press Reset to start a new measurement.</code></pre>
+
+<h2>Technical Details</h2>
+<ul>
+  <li><strong>CRS handling:</strong> Offsets are in ground metres. The plugin uses
+      <code>QgsDistanceArea</code> with the project ellipsoid to convert between
+      map-CRS units and ground distances, so it works accurately in EPSG:3857,
+      UTM zones, state planes, and even geographic CRS.</li>
+  <li><strong>Axis vectors:</strong> Internally computed as unit vectors scaled so that
+      1.0&nbsp;=&nbsp;1 ground metre. The X-axis is the Y-axis rotated 90&deg;
+      clockwise: <code>(a, b) → (b, -a)</code>.</li>
+  <li><strong>Canvas items:</strong> All markers, rubber bands, and labels are
+      <code>QgsMapCanvasItem</code> objects that reposition on pan/zoom. Labels use a
+      fixed pixel size for consistent readability.</li>
+  <li><strong>Memory layer export:</strong> Uses the QGIS memory provider
+      (<code>"memory"</code>). The layer inherits the project CRS.</li>
+</ul>
+
+<h2>Installation</h2>
+
+<h3>From ZIP</h3>
+<ol>
+  <li>Download the plugin ZIP archive.</li>
+  <li>In QGIS, go to <strong>Plugins &rarr; Manage and Install Plugins &rarr; Install from ZIP</strong>.</li>
+  <li>Select the ZIP file and click <strong>Install</strong>.</li>
+</ol>
+
+<h3>Manual</h3>
+<ol>
+  <li>Copy the <code>orthogonal_measure</code> folder to your QGIS plugins directory:
+    <ul>
+      <li><strong>Windows:</strong> <code>%APPDATA%\QGIS\QGIS3\profiles\default\python\plugins\</code></li>
+      <li><strong>Linux:</strong> <code>~/.local/share/QGIS/QGIS3/profiles/default/python/plugins/</code></li>
+      <li><strong>macOS:</strong> <code>~/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins/</code></li>
+    </ul>
+  </li>
+  <li>Restart QGIS (or reload plugins).</li>
+  <li>Enable <em>Orthogonal Measure</em> in <strong>Plugins &rarr; Manage and Install Plugins</strong>.</li>
+</ol>
+
+<h2>File Structure</h2>
+<pre><code>orthogonal_measure/
+├── __init__.py                        # Plugin entry point (classFactory)
+├── orthogonal_measure.py              # Main plugin class (OrthogonalMeasure)
+├── ortho_map_tool.py                  # Map tool + canvas items
+├── orthogonal_measure_dialog.py       # Dockable panel (QDockWidget)
+├── orthogonal_measure_dialog_base.ui  # Qt Designer UI form
+├── resources.py                       # Compiled Qt resources (icon)
+├── resources.qrc                      # Qt resource definition
+├── metadata.txt                       # QGIS plugin metadata
+├── icon.png                           # Plugin icon
+├── README.md                          # Markdown documentation
+├── README.html                        # This file
+└── i18n/                              # Translations</code></pre>
+
+<h2>Known Limitations</h2>
+<ul>
+  <li>The export creates a <strong>temporary memory layer</strong> &mdash; it must be saved manually to persist.</li>
+  <li>The plugin does not support entering offsets in units other than metres.</li>
+  <li>Axis lines have a fixed visual length (1.5&times; the distance between origin and Y-axis point).</li>
+</ul>
+
+<hr>
+
+<footer>
+  &copy; 2026 Darko Nedic &mdash; <a href="mailto:office@geo-biz.com">office@geo-biz.com</a><br>
+  Licensed under the GNU General Public License v2+
+</footer>
+
+</body>
+</html>
