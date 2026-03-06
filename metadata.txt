@@ -12,8 +12,8 @@ email=office@geo-biz.com
 
 about=Orthogonal Measure lets you place two reference points on the map canvas to define a local coordinate system. The first point becomes the origin, the second defines the positive Y-axis direction, and the X-axis is automatically set perpendicular (90° clockwise). You can then enter X and Y offsets in metres via the dialog, click "Construct Point", and the plugin will place a marker at the computed position. All constructed points can be exported to a temporary memory layer.
 
-tracker=http://bugs
-repository=http://repo
+tracker=https://github.com/Darkonyks/ortogonal-measure/issues
+repository=https://github.com/Darkonyks/ortogonal-measure
 # End of mandatory metadata
 
 # Recommended items:
@@ -25,7 +25,7 @@ hasProcessingProvider=no
 # Tags are comma separated with spaces allowed
 tags=sketching, coordinate system, measure, orthogonal
 
-homepage=http://homepage
+homepage=https://github.com/Darkonyks/ortogonal-measure
 category=Vector
 icon=icon.png
 # experimental flag

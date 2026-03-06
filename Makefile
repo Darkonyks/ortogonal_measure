@@ -38,13 +38,13 @@ LOCALES =
 # translation
 SOURCES = \
 	__init__.py \
-	orthogonal_measure.py orthogonal_measure_dialog.py
+	orthogonal_measure.py orthogonal_measure_dialog.py ortho_map_tool.py
 
 PLUGINNAME = orthogonal_measure
 
 PY_FILES = \
 	__init__.py \
-	orthogonal_measure.py orthogonal_measure_dialog.py
+	orthogonal_measure.py orthogonal_measure_dialog.py ortho_map_tool.py
 
 UI_FILES = orthogonal_measure_dialog_base.ui
 
