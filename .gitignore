@@ -1,0 +1,25 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Qt compiled resources (regenerated from .qrc)
+# resources.py  # uncomment if you want to exclude
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# Build / dist
+*.zip
+dist/
+build/
+*.egg-info/

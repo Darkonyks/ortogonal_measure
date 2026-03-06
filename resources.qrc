@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/orthogonal_measure" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>

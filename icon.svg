@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3a7bd5"/>
+      <stop offset="100%" stop-color="#1a3a6a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background rounded square -->
+  <rect x="2" y="2" width="60" height="60" rx="10" ry="10" fill="url(#bg)" stroke="#0f2647" stroke-width="1.5"/>
+
+  <!-- Y-axis (blue vertical line) -->
+  <line x1="18" y1="50" x2="18" y2="10" stroke="#5eb8ff" stroke-width="3" stroke-linecap="round"/>
+  <!-- Y-axis arrowhead -->
+  <polygon points="18,7 14,15 22,15" fill="#5eb8ff"/>
+  <!-- Y label -->
+  <text x="9" y="14" font-family="Arial,Helvetica,sans-serif" font-size="9" font-weight="bold" fill="#5eb8ff">Y</text>
+
+  <!-- X-axis (green horizontal line) -->
+  <line x1="18" y1="50" x2="56" y2="50" stroke="#5edb8a" stroke-width="3" stroke-linecap="round"/>
+  <!-- X-axis arrowhead -->
+  <polygon points="58,50 50,46 50,54" fill="#5edb8a"/>
+  <!-- X label -->
+  <text x="52" y="45" font-family="Arial,Helvetica,sans-serif" font-size="9" font-weight="bold" fill="#5edb8a">X</text>
+
+  <!-- Right-angle square at origin -->
+  <rect x="18" y="42" width="8" height="8" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.9"/>
+
+  <!-- Origin dot (red) -->
+  <circle cx="18" cy="50" r="3.5" fill="#ff5252" stroke="#fff" stroke-width="1"/>
+
+  <!-- Dashed projection lines to constructed point -->
+  <line x1="42" y1="50" x2="42" y2="22" stroke="#ffffff" stroke-width="1" stroke-dasharray="4,3" opacity="0.45"/>
+  <line x1="18" y1="22" x2="42" y2="22" stroke="#ffffff" stroke-width="1" stroke-dasharray="4,3" opacity="0.45"/>
+
+  <!-- Constructed point (red with white ring) -->
+  <circle cx="42" cy="22" r="4.5" fill="#ff5252" stroke="#ffffff" stroke-width="2"/>
+
+  <!-- Small "x" and "y" dimension labels -->
+  <text x="28" y="19" font-family="Arial,Helvetica,sans-serif" font-size="7" fill="#ffffff" opacity="0.7">y</text>
+  <text x="44" y="38" font-family="Arial,Helvetica,sans-serif" font-size="7" fill="#ffffff" opacity="0.7">x</text>
+</svg>
