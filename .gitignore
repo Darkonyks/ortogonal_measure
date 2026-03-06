@@ -18,6 +18,10 @@ Thumbs.db
 .DS_Store
 Desktop.ini
 
+# Virtual environment
+venv/
+.venv/
+
 # Build / dist
 *.zip
 dist/

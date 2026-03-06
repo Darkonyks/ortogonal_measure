@@ -7,11 +7,12 @@
 
 import sys
 import getpass
-import xmlrpc.client
 from optparse import OptionParser
 
 import defusedxml.xmlrpc
 defusedxml.xmlrpc.monkey_patch()
+
+import xmlrpc.client  # noqa: E402 - must be imported after monkey_patch
 
 standard_library.install_aliases()
 
